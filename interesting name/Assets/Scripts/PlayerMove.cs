@@ -30,8 +30,8 @@ public class PlayerMove : MonoBehaviour
     //simplifying jumping and all its conditions
     private void Jump()
     {
-        body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, speed);
         grounded = false;
+        body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, speed);
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
