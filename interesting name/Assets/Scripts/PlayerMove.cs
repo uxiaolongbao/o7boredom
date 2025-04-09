@@ -18,6 +18,8 @@ public class PlayerMove : MonoBehaviour
     //collision
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
+    //animation
+    public Animator animator;
     
 
     private void Awake()
@@ -32,6 +34,8 @@ public class PlayerMove : MonoBehaviour
             return; 
         horizontalInput = Input.GetAxis("Horizontal");
         body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
+
+        animator.SetFloat("speed", Mathf.Abs(horizontalInput));
 
         //flip player when moving left and right (for animations/sprites) + movement
         if(horizontalInput > 0.01f)
