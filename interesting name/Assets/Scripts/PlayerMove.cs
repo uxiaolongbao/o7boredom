@@ -65,6 +65,7 @@ public class PlayerMove : MonoBehaviour
             {
                 isJumping = true;
                 Jump();
+                animator.SetBool("isJump", true);
             }
 
         }
@@ -73,6 +74,7 @@ public class PlayerMove : MonoBehaviour
 
         if (isGrounded())
             isJumping = false;
+        animator.SetBool("isJump", false);
     }
 
     //its literally jumping and all its variations duh. its called the jump method for a reason
