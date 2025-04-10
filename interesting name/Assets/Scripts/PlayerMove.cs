@@ -65,16 +65,15 @@ public class PlayerMove : MonoBehaviour
             {
                 isJumping = true;
                 Jump();
-                animator.SetBool("isJump", true);
             }
 
         }
         else
             wallJumpCooldown += Time.deltaTime;
 
-        if (isGrounded())
+        if (isGrounded()) { }
             isJumping = false;
-        animator.SetBool("isJump", false);
+        animator.SetBool("isJump", !isGrounded());
     }
 
     //its literally jumping and all its variations duh. its called the jump method for a reason
