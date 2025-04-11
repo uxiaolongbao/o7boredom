@@ -20,6 +20,13 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private LayerMask wallLayer;
     //animation
     public Animator animator;
+    //coyote time
+    [SerializeField] private float coyoteTime = 0.1f;
+    private float coyoteTimeCounter;
+    //variable jump height
+    [SerializeField] private float jumpHoldMultiplier = 0.5f;
+    [SerializeField] private float minJumpHeight = 3f;
+    private bool isHoldingJump;
     
 
     private void Awake()
@@ -44,6 +51,30 @@ public class PlayerMove : MonoBehaviour
             transform.localScale = new UnityEngine.Vector3(-1, 1, 1);
         
         body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
+
+        //coyote time
+        if (isGrounded())
+        {
+            coyoteTimeCounter = coyoteTime;
+        }
+        else
+        {
+            coyoteTimeCounter -= Time.deltaTime;
+        }
+
+        //flexible jump height
+        isHoldingJump = Input.GetKey(KeyCode.UpArrow);
+        if (!isHoldingJump && body.linearVelocity.y > minJumpHeight)
+        {
+            body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, minJumpHeight);
+        }
+        else if (isHoldingJump && !isGrounded() && !onWall())
+        {
+            body.gravityScale = jumpHoldMultiplier;
+        }
+        else{
+            body.gravityScale = 5;
+        }
 
         //wall jumping logic
         if(wallJumpCooldown > 0.2f)
