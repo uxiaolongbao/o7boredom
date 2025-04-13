@@ -44,6 +44,19 @@ public class PlayerMove : MonoBehaviour
             return;
         //horizontalInput = Input.GetAxis("Horizontal"); Original Code
         //New code to help reduce movement input for player when slipping
+        /*
+         * horizontalInput = Input.GetAxis("Horizontal");
+
+            float slideSpeed = isSlipping ? speed * 0.3f : speed;
+            float acceleration = isSlipping ? 5f : 20f;
+
+            float targetVelocityX = horizontalInput * slideSpeed;
+            float newVelocityX = Mathf.Lerp(body.velocity.x, targetVelocityX, Time.deltaTime * acceleration);
+
+            body.velocity = new Vector2(newVelocityX, body.velocity.y);
+
+        */
+
         float baseInput = Input.GetAxis("Horizontal");
         horizontalInput = isSlipping ? baseInput * SlipperySpeedMultiplier : baseInput; 
 
