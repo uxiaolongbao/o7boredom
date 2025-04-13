@@ -27,6 +27,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float jumpHoldMultiplier = 0.5f;
     [SerializeField] private float minJumpHeight = 3f;
     private bool isHoldingJump;
+    //Slippery make player uncontrollable
+    [SerializeField] private float SlipperySpeedMultiplier = 0.3f;
+    private bool isSlipping = false; 
     
 
     private void Awake()
@@ -38,8 +41,12 @@ public class PlayerMove : MonoBehaviour
     private void Update()
     {
         if (isWallJumping) 
-            return; 
-        horizontalInput = Input.GetAxis("Horizontal");
+            return;
+        //horizontalInput = Input.GetAxis("Horizontal"); Original Code
+        //New code to help reduce movement input for player when slipping
+        float baseInput = Input.GetAxis("Horizontal");
+        horizontalInput = isSlipping ? baseInput * SlipperySpeedMultiplier : baseInput; 
+
         body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
 
         animator.SetFloat("speed", Mathf.Abs(horizontalInput));
@@ -138,5 +145,11 @@ public class PlayerMove : MonoBehaviour
         bool left = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.left, boxCollider.bounds.extents.x + 0.1f, wallLayer);
         bool right = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.right, boxCollider.bounds.extents.x + 0.1f, wallLayer);
         return left || right;
+    }
+
+    //Slipping
+    public void SetSlipping(bool slip)
+    {
+        isSlipping = slip;
     }
 }
