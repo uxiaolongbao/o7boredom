@@ -29,7 +29,8 @@ public class PlayerMove : MonoBehaviour
     private bool isHoldingJump;
     //Slippery make player uncontrollable
     [SerializeField] private float SlipperySpeedMultiplier = 0.3f;
-    private bool isSlipping = false; 
+    private bool isSlipping = false;
+    private float slipMomentum = 0f; 
     
 
     private void Awake()
@@ -44,23 +45,34 @@ public class PlayerMove : MonoBehaviour
             return;
         //horizontalInput = Input.GetAxis("Horizontal"); Original Code
         //New code to help reduce movement input for player when slipping
-        /*
-         * horizontalInput = Input.GetAxis("Horizontal");
+        //Lower the speed, the more slippery, lower the acceleration the more slippery
+        horizontalInput = Input.GetAxis("Horizontal");
 
-            float slideSpeed = isSlipping ? speed * 0.3f : speed;
-            float acceleration = isSlipping ? 5f : 20f;
+        float slideSpeed = isSlipping ? speed * 0.4f : speed;
+        float acceleration = isSlipping ? 0.03f : 20f;
 
-            float targetVelocityX = horizontalInput * slideSpeed;
-            float newVelocityX = Mathf.Lerp(body.velocity.x, targetVelocityX, Time.deltaTime * acceleration);
+        float targetVelocityX; // <- this is the missing declaration!
 
-            body.velocity = new Vector2(newVelocityX, body.velocity.y);
+        if (isSlipping)
+        {
+            if (Mathf.Abs(horizontalInput) > 0.01f)
+            {
+                slipMomentum = horizontalInput * slideSpeed;
+            }
+            else
+            {
+                slipMomentum = Mathf.Lerp(slipMomentum, 0f, Time.deltaTime * 0.1f); // drift decay
+            }
 
-        */
+            targetVelocityX = slipMomentum;
+        }
+        else
+        {
+            targetVelocityX = horizontalInput * slideSpeed;
+        }
 
-        float baseInput = Input.GetAxis("Horizontal");
-        horizontalInput = isSlipping ? baseInput * SlipperySpeedMultiplier : baseInput; 
-
-        body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
+        float newVelocityX = Mathf.Lerp(body.linearVelocity.x, targetVelocityX, Time.deltaTime * acceleration);
+        body.linearVelocity = new UnityEngine.Vector2(newVelocityX, body.linearVelocity.y);
 
         animator.SetFloat("speed", Mathf.Abs(horizontalInput));
 
@@ -70,7 +82,7 @@ public class PlayerMove : MonoBehaviour
         else if (horizontalInput < -0.01f)
             transform.localScale = new UnityEngine.Vector3(-1, 1, 1);
         
-        body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
+        //body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
 
         //coyote time
         if (isGrounded())
