@@ -48,8 +48,8 @@ public class PlayerMove : MonoBehaviour
         //Lower the speed, the more slippery, lower the acceleration the more slippery
         horizontalInput = Input.GetAxis("Horizontal");
 
-        float slideSpeed = isSlipping ? speed * 0.4f : speed;
-        float acceleration = isSlipping ? 0.03f : 20f;
+        float slideSpeed = isSlipping ? speed * 0.5f : speed;
+        float acceleration = isSlipping ? 1f : 20f;
 
         float targetVelocityX; // <- this is the missing declaration!
 
@@ -61,7 +61,7 @@ public class PlayerMove : MonoBehaviour
             }
             else
             {
-                slipMomentum = Mathf.Lerp(slipMomentum, 0f, Time.deltaTime * 0.1f); // drift decay
+                slipMomentum = Mathf.Lerp(slipMomentum, 0f, Time.deltaTime * 0.5f); // drift decay
             }
 
             targetVelocityX = slipMomentum;
@@ -74,6 +74,8 @@ public class PlayerMove : MonoBehaviour
         float newVelocityX = Mathf.Lerp(body.linearVelocity.x, targetVelocityX, Time.deltaTime * acceleration);
         body.linearVelocity = new UnityEngine.Vector2(newVelocityX, body.linearVelocity.y);
 
+
+
         animator.SetFloat("speed", Mathf.Abs(horizontalInput));
 
         //flip player when moving left and right (for animations/sprites) + movement
@@ -82,7 +84,7 @@ public class PlayerMove : MonoBehaviour
         else if (horizontalInput < -0.01f)
             transform.localScale = new UnityEngine.Vector3(-1, 1, 1);
         
-        //body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
+       // body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
 
         //coyote time
         if (isGrounded())
