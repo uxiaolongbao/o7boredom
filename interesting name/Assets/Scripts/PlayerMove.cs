@@ -12,7 +12,7 @@ public class PlayerMove : MonoBehaviour
     private float wallJumpCooldown;
     private float horizontalInput;
     private bool isJumping; //ik theres a warning for this but immma use this later
-    [SerializeField] private float wallSlideSpeed = 4f;
+    [SerializeField] private float wallSlideSpeed = 7f;
     [SerializeField] private float wallJumpHorizontalForce = 15f;
     private bool isWallJumping;
     //collision
@@ -31,7 +31,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float SlipperySpeedMultiplier = 0.3f;
     private bool isSlipping = false;
     private float slipMomentum = 0f; 
-    
+    //corner checking
+    [SerializeField] private float cornerPushForce = 2f;
+    [SerializeField] private float wallStickThreshold = 0.1f;
 
     private void Awake()
     {
@@ -43,6 +45,12 @@ public class PlayerMove : MonoBehaviour
     {
         if (isWallJumping) 
             return;
+        
+        if (isGrounded() && onWall())
+        {
+            UnityEngine.Vector2 wallNormal = GetWallNormal();
+            body.linearVelocity = new UnityEngine.Vector2(wallNormal.x * cornerPushForce, body.linearVelocity.y);
+        }
         //horizontalInput = Input.GetAxis("Horizontal"); Original Code
         //New code to help reduce movement input for player when slipping
         //Lower the speed, the more slippery, lower the acceleration the more slippery
@@ -148,11 +156,19 @@ public class PlayerMove : MonoBehaviour
             body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, jumpPower);
         else if (onWall() && !isGrounded())
         {
+            UnityEngine.Vector2 wallNormal = GetWallNormal();
+            /*float direction = -Mathf.Sign(wallNormal.x);
             float direction = -Mathf.Sign(transform.localScale.x);
             body.AddForce(new UnityEngine.Vector2(direction * wallJumpHorizontalForce, jumpPower), ForceMode2D.Impulse);
+            */
+            bool touchingLeftWall = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.left, 
+                boxCollider.bounds.extents.x + 0.1f, wallLayer);
+            float pushDirection = touchingLeftWall ? 1f : -1f;
+            body.linearVelocity = new UnityEngine.Vector2(pushDirection * wallJumpHorizontalForce, jumpPower);
             isWallJumping = true;
             Invoke(nameof(ResetWallJump), 0.2f);
         }
+        coyoteTimeCounter = 0;
     }
 
     private void ResetWallJump() => isWallJumping = false;
@@ -178,5 +194,18 @@ public class PlayerMove : MonoBehaviour
     public void SetSlipping(bool slip)
     {
         isSlipping = slip;
+    }
+
+    //help wall no go kaboom
+    private UnityEngine.Vector2 GetWallNormal()
+    {
+        RaycastHit2D leftHit = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.left, 
+            boxCollider.bounds.extents.x + wallStickThreshold, wallLayer);
+        RaycastHit2D rightHit = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.right, 
+            boxCollider.bounds.extents.x + wallStickThreshold, wallLayer);
+
+        if (leftHit) return leftHit.normal;
+        if (rightHit) return rightHit.normal;
+        return new UnityEngine.Vector2(-Mathf.Sign(transform.localScale.x), 0);
     }
 }
