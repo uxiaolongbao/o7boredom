@@ -28,9 +28,15 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float minJumpHeight = 3f;
     private bool isHoldingJump;
     //Slippery make player uncontrollable
-    [SerializeField] private float SlipperySpeedMultiplier = 0.3f;
     private bool isSlipping = false;
-    private float slipMomentum = 0f; 
+    private float slipMomentum = 0f;
+    [SerializeField] float slipMultiplier = 0.2f;       // Controls how slow you move on slippery surfaces
+    [SerializeField] float slipDecayRate = 0.1f;        // Controls how slowly you stop sliding
+    [SerializeField] float slipAcceleration = 0.2f;
+    [SerializeField] private float overslideStrength = 2f; // How hard it pushes after releasing input
+    [SerializeField] private float overslideDecay = 1f;    // How fast it fades out
+    private float overslideMomentum = 0f;
+
     //corner checking
     [SerializeField] private float cornerPushForce = 2f;
     [SerializeField] private float wallStickThreshold = 0.1f;
@@ -56,28 +62,47 @@ public class PlayerMove : MonoBehaviour
         //Lower the speed, the more slippery, lower the acceleration the more slippery
         horizontalInput = Input.GetAxis("Horizontal");
 
-        float slideSpeed = isSlipping ? speed * 0.5f : speed;
-        float acceleration = isSlipping ? 1f : 20f;
+        float slideSpeed = isSlipping ? speed * slipMultiplier : speed;
+        float acceleration = isSlipping ? slipAcceleration : 20f;
 
-        float targetVelocityX; // <- this is the missing declaration!
+        float targetVelocityX = 0f;
 
         if (isSlipping)
         {
             if (Mathf.Abs(horizontalInput) > 0.01f)
             {
-                slipMomentum = horizontalInput * slideSpeed;
+                // Slowly steer while slipping, but still apply full control
+                slipMomentum = Mathf.Lerp(slipMomentum, horizontalInput * slideSpeed, Time.deltaTime * slipAcceleration);
+
+                // Reset overslide because input is active
+                overslideMomentum = 0f;
             }
             else
             {
-                slipMomentum = Mathf.Lerp(slipMomentum, 0f, Time.deltaTime * 0.5f); // drift decay
+                // If no input, slowly decay momentum and apply overslide
+                slipMomentum = Mathf.Lerp(slipMomentum, 0f, Time.deltaTime * slipDecayRate);
+
+                if (Mathf.Abs(overslideMomentum) < 0.01f)
+                {
+                    // Trigger overslide only once when input stops
+                    overslideMomentum = Mathf.Sign(slipMomentum) * overslideStrength;
+                }
+
+                // Fade out overslide
+                overslideMomentum = Mathf.Lerp(overslideMomentum, 0f, Time.deltaTime * overslideDecay);
             }
 
-            targetVelocityX = slipMomentum;
+            // Combine slip momentum and overslide for total movement
+            targetVelocityX = slipMomentum + overslideMomentum;
         }
         else
         {
+            // If not slipping, reset all momentum and allow full movement control
+            overslideMomentum = 0f; // Ensure no lingering overslide
+            slipMomentum = 0f; // Reset slip momentum
             targetVelocityX = horizontalInput * slideSpeed;
         }
+
 
         float newVelocityX = Mathf.Lerp(body.linearVelocity.x, targetVelocityX, Time.deltaTime * acceleration);
         body.linearVelocity = new UnityEngine.Vector2(newVelocityX, body.linearVelocity.y);

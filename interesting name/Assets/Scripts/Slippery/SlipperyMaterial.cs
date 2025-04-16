@@ -9,7 +9,7 @@ public class SlipperyWall
     {
         //Setting friction
         PhysicsMaterial2D material = new PhysicsMaterial2D("SlipperyMaterial");
-        material.friction = 0f;
+        material.friction = -1f;
         material.bounciness = 0f;
 
         AssetDatabase.CreateAsset(material, "Assets/SlipperyMaterial.physicsMaterial2D");
