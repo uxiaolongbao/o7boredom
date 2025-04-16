@@ -251,11 +251,11 @@ Transform:
   m_GameObject: {fileID: 266804976}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.5927997, y: -5.804528, z: 0}
-  m_LocalScale: {x: 2, y: 2, z: 1}
+  m_LocalPosition: {x: 2.7963998, y: -2.902264, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 737204953}
+  m_Father: {fileID: 272808203}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &266804978
 MonoBehaviour:
@@ -303,7 +303,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -4.2886133, y: -0.32664394}
+  m_Offset: {x: -4.297209, y: -0.328663}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -313,7 +313,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 4.9179344, y: 0.4785838}
+  m_Size: {x: 4.9836845, y: 0.47454572}
   m_EdgeRadius: 0
 --- !u!1 &272808202
 GameObject:
@@ -331,7 +331,7 @@ GameObject:
   - component: {fileID: 272808207}
   m_Layer: 6
   m_Name: mud tilemap
-  m_TagString: Ground
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -348,7 +348,8 @@ Transform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 266804977}
   m_Father: {fileID: 737204953}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!19719996 &272808204
@@ -1107,7 +1108,7 @@ GameObject:
   - component: {fileID: 597857051}
   m_Layer: 6
   m_Name: SlipperyWall (1)
-  m_TagString: Ground
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4639,7 +4640,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 266804977}
   - {fileID: 272808203}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -7135,7 +7135,7 @@ GameObject:
   - component: {fileID: 2040674977}
   m_Layer: 6
   m_Name: SlipperyWall
-  m_TagString: Ground
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -7269,7 +7269,7 @@ GameObject:
   - component: {fileID: 2092858117}
   m_Layer: 6
   m_Name: SlipperyWall (2)
-  m_TagString: Ground
+  m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
