@@ -19681,7 +19681,6 @@ MonoBehaviour:
   jumpPower: 20
   wallSlideSpeed: 7
   wallJumpHorizontalForce: 15
-  wallStickTime: 0.1
   groundLayer:
     serializedVersion: 2
     m_Bits: 64
