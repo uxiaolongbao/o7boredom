@@ -11,10 +11,11 @@ public class PlayerMove : MonoBehaviour
     private BoxCollider2D boxCollider;
     private float wallJumpCooldown;
     private float horizontalInput;
-    private bool isJumping; //ik theres a warning for this but immma use this later
+    private bool isJumping; 
     [SerializeField] private float wallSlideSpeed = 7f;
     [SerializeField] private float wallJumpHorizontalForce = 15f;
     private bool isWallJumping;
+    private int lastWallDirection; // 1=right, -1=left
     //collision
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
@@ -57,11 +58,9 @@ public class PlayerMove : MonoBehaviour
             UnityEngine.Vector2 wallNormal = GetWallNormal();
             body.linearVelocity = new UnityEngine.Vector2(wallNormal.x * cornerPushForce, body.linearVelocity.y);
         }
-        //horizontalInput = Input.GetAxis("Horizontal"); Original Code
-        //New code to help reduce movement input for player when slipping
-        //Lower the speed, the more slippery, lower the acceleration the more slippery
+        
         horizontalInput = Input.GetAxis("Horizontal");
-
+        
         float slideSpeed = isSlipping ? speed * slipMultiplier : speed;
         float acceleration = isSlipping ? slipAcceleration : 20f;
 
@@ -103,11 +102,8 @@ public class PlayerMove : MonoBehaviour
             targetVelocityX = horizontalInput * slideSpeed;
         }
 
-
         float newVelocityX = Mathf.Lerp(body.linearVelocity.x, targetVelocityX, Time.deltaTime * acceleration);
         body.linearVelocity = new UnityEngine.Vector2(newVelocityX, body.linearVelocity.y);
-
-
 
         animator.SetFloat("speed", Mathf.Abs(horizontalInput));
 
@@ -116,8 +112,6 @@ public class PlayerMove : MonoBehaviour
             transform.localScale = UnityEngine.Vector3.one;
         else if (horizontalInput < -0.01f)
             transform.localScale = new UnityEngine.Vector3(-1, 1, 1);
-        
-       // body.linearVelocity = new UnityEngine.Vector2(horizontalInput * speed, body.linearVelocityY);
 
         //coyote time
         if (isGrounded())
@@ -146,7 +140,7 @@ public class PlayerMove : MonoBehaviour
         //wall jumping logic
         if(wallJumpCooldown > 0.2f)
         {
-
+            
             if (onWall() && !isGrounded())
             {
                 if (body.linearVelocityY < 0)
@@ -156,6 +150,7 @@ public class PlayerMove : MonoBehaviour
                 body.gravityScale = 4;
                 body.linearVelocity = UnityEngine.Vector2.zero; 
             }
+            
             else
                 body.gravityScale = 5;
 
@@ -181,15 +176,10 @@ public class PlayerMove : MonoBehaviour
             body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, jumpPower);
         else if (onWall() && !isGrounded())
         {
-            UnityEngine.Vector2 wallNormal = GetWallNormal();
-            /*float direction = -Mathf.Sign(wallNormal.x);
-            float direction = -Mathf.Sign(transform.localScale.x);
-            body.AddForce(new UnityEngine.Vector2(direction * wallJumpHorizontalForce, jumpPower), ForceMode2D.Impulse);
-            */
-            bool touchingLeftWall = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.left, 
-                boxCollider.bounds.extents.x + 0.1f, wallLayer);
-            float pushDirection = touchingLeftWall ? 1f : -1f;
+            float pushDirection = -lastWallDirection;
             body.linearVelocity = new UnityEngine.Vector2(pushDirection * wallJumpHorizontalForce, jumpPower);
+            transform.localScale = new UnityEngine.Vector3(pushDirection, 1, 1);
+
             isWallJumping = true;
             Invoke(nameof(ResetWallJump), 0.2f);
         }
@@ -197,10 +187,6 @@ public class PlayerMove : MonoBehaviour
     }
 
     private void ResetWallJump() => isWallJumping = false;
-
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-    }
 
     private bool isGrounded()
     {
@@ -210,9 +196,15 @@ public class PlayerMove : MonoBehaviour
 
     private bool onWall()
     {
-        bool left = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.left, boxCollider.bounds.extents.x + 0.1f, wallLayer);
-        bool right = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.right, boxCollider.bounds.extents.x + 0.1f, wallLayer);
-        return left || right;
+        float rayLength = boxCollider.bounds.extents.x + 0.1f;
+    
+        bool leftWall = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.left, rayLength, groundLayer);
+        bool rightWall = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.right, rayLength, groundLayer);
+
+        if(leftWall) lastWallDirection = -1;
+        if(rightWall) lastWallDirection = 1;
+
+        return leftWall || rightWall;
     }
 
     //Slipping
