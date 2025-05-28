@@ -28,6 +28,9 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float jumpHoldMultiplier = 0.5f;
     [SerializeField] private float minJumpHeight = 3f;
     private bool isHoldingJump;
+    //multiple jumps
+    [SerializeField] private int extraJumps;
+    private int jumpCounter;
     //Slippery make player uncontrollable
     private bool isSlipping = false;
     private float slipMomentum = 0f;
@@ -117,6 +120,7 @@ public class PlayerMove : MonoBehaviour
         if (isGrounded())
         {
             coyoteTimeCounter = coyoteTime;
+            jumpCounter = extraJumps;
         }
         else
         {
@@ -172,8 +176,13 @@ public class PlayerMove : MonoBehaviour
     //its literally jumping and all its variations duh. its called the jump method for a reason
     private void Jump()
     {
-        if(isGrounded())
+        if (coyoteTimeCounter <= 0 && !onWall() && jumpCounter <= 0) return;
+
+        if (isGrounded())
+        {
+
             body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, jumpPower);
+        }
         else if (onWall() && !isGrounded())
         {
             float pushDirection = -lastWallDirection;
@@ -182,6 +191,14 @@ public class PlayerMove : MonoBehaviour
 
             isWallJumping = true;
             Invoke(nameof(ResetWallJump), 0.2f);
+
+        } else
+        {
+            if (jumpCounter > 0)
+            {
+                body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, jumpPower);
+                jumpCounter--;
+            }
         }
         coyoteTimeCounter = 0;
     }
