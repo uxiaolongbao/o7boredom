@@ -186,6 +186,7 @@ public class PlayerMove : MonoBehaviour
         {
             StartCoroutine(Dash());
         }
+        animator.SetBool("isDash", isDashing);
     }
 
     //its literally jumping and all its variations duh. its called the jump method for a reason

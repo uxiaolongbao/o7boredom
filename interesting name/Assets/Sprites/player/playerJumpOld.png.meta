@@ -106,7 +106,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: playerJump_0
+      name: playerJumpOld_0
       rect:
         serializedVersion: 2
         x: 0
@@ -119,16 +119,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: a17bbb9f9fc6309d0800000000000000
-      internalID: -2809281921656572134
+      spriteID: 71fc00eec16bcf048939d732923e1654
+      internalID: -1605043298
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: playerJump_1
+      name: playerJumpOld_1
       rect:
         serializedVersion: 2
         x: 32
@@ -141,16 +141,16 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 23a6e3e11789b0110800000000000000
-      internalID: 1228242934994725426
+      spriteID: 382f0f58075c649468a8d5ab701414a1
+      internalID: 1080546318
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: playerJump_2
+      name: playerJumpOld_2
       rect:
         serializedVersion: 2
         x: 0
@@ -163,10 +163,10 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 81a1b4b0ceee661e0800000000000000
-      internalID: -2204812269982115304
+      spriteID: e045b67085c4af1469140507b6fbacf1
+      internalID: -2019618069
       vertices: []
       indices: 
       edges: []
@@ -185,9 +185,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      playerJump_0: -2809281921656572134
-      playerJump_1: 1228242934994725426
-      playerJump_2: -2204812269982115304
+      playerJumpOld_0: -1605043298
+      playerJumpOld_1: 1080546318
+      playerJumpOld_2: -2019618069
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
