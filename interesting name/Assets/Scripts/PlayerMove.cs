@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Numerics;
 using UnityEngine;
 using UnityEngine.UIElements;
@@ -30,6 +31,11 @@ public class PlayerMove : MonoBehaviour
     private bool isHoldingJump;
     //multiple jumps
     [SerializeField] private int extraJumps;
+    //dash
+    private bool isDashing;
+    [SerializeField] private float dashingPower;
+    [SerializeField] private float dashingTime;
+    [SerializeField] private float dashingCooldown;
     private int jumpCounter;
     //Slippery make player uncontrollable
     private bool isSlipping = false;
@@ -53,6 +59,10 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        if (isDashing)
+        {
+            return;
+        }
         if (isWallJumping) 
             return;
         
@@ -171,6 +181,11 @@ public class PlayerMove : MonoBehaviour
         if (isGrounded()) { }
             isJumping = false;
         animator.SetBool("isJump", !isGrounded());
+        // dash logic
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            StartCoroutine(Dash());
+        }
     }
 
     //its literally jumping and all its variations duh. its called the jump method for a reason
@@ -241,5 +256,17 @@ public class PlayerMove : MonoBehaviour
         if (leftHit) return leftHit.normal;
         if (rightHit) return rightHit.normal;
         return new UnityEngine.Vector2(-Mathf.Sign(transform.localScale.x), 0);
+    }
+
+    private IEnumerator Dash()
+    {
+        isDashing = true;
+        float originalGravity = body.gravityScale;
+        body.gravityScale = 0f;
+        body.linearVelocity = new UnityEngine.Vector2(transform.localScale.x * dashingPower, 0);
+        yield return new WaitForSeconds(dashingTime);
+        body.gravityScale = originalGravity;
+        isDashing = false;
+        yield return new WaitForSeconds(dashingCooldown);
     }
 }

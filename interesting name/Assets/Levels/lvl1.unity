@@ -19464,6 +19464,9 @@ MonoBehaviour:
   jumpHoldMultiplier: 0.5
   minJumpHeight: 3
   extraJumps: 1
+  dashingPower: 25
+  dashingTime: 0.25
+  dashingCooldown: 1
   slipMultiplier: 0.04
   slipDecayRate: 0.1
   slipAcceleration: 0.2
