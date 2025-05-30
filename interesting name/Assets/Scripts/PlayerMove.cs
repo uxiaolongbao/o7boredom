@@ -138,7 +138,7 @@ public class PlayerMove : MonoBehaviour
         }
 
         //flexible jump height
-        isHoldingJump = Input.GetKey(KeyCode.UpArrow);
+        isHoldingJump = Input.GetKey(KeyCode.Z);
         if (!isHoldingJump && body.linearVelocity.y > minJumpHeight)
         {
             body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, minJumpHeight);
@@ -168,7 +168,7 @@ public class PlayerMove : MonoBehaviour
             else
                 body.gravityScale = 5;
 
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Input.GetKeyDown(KeyCode.Z))
             {
                 isJumping = true;
                 Jump();
