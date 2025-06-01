@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PurplePotionScript : MonoBehaviour
+public class PotionScript : MonoBehaviour
 {
     //public RigidBody2D PurplePotionRigidBody;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -19,7 +19,11 @@ public class PurplePotionScript : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            Destroy(gameObject);
+            Destroy(other.gameObject);
+            Heal(50);
         }
+        
     }
+
+    
 }
