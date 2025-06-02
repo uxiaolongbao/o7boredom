@@ -8,26 +8,43 @@ public class Projectile : MonoBehaviour
     private float lifetime;
 
     private BoxCollider2D boxCollider;
+    private Rigidbody2D rb;
 
     private void Awake()
     {
         boxCollider = GetComponent<BoxCollider2D>();
+        rb = GetComponent<Rigidbody2D>();
+    }
+
+    private void OnEnable()
+    {
+        lifetime = 0;
+        hit = false;
+        boxCollider.enabled = true;
+
+        rb.linearVelocity = new Vector2(direction * speed, 0);
     }
 
     private void Update()
     {
-        if (hit) return;
-        float movementSpeed = speed * Time.deltaTime;
-        transform.Translate(movementSpeed, 0, 0);
-
         lifetime += Time.deltaTime;
-        if (lifetime > 5) gameObject.SetActive(false);
+        if (lifetime > 3)
+        {
+            gameObject.SetActive(false);
+        }
+
+        if (Mathf.Abs(rb.linearVelocity.y) > 0.1f)
+        {
+            rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
         hit = true;
+        rb.linearVelocity = Vector2.zero;
         boxCollider.enabled = false;
+        gameObject.SetActive(false);
 
     }
 
@@ -36,9 +53,6 @@ public class Projectile : MonoBehaviour
         lifetime = 0;
         direction = _direction;
         gameObject.SetActive(true);
-        hit = false;
-        boxCollider.enabled = true;
-
         float localScaleX = transform.localScale.x;
         if (Mathf.Sign(localScaleX) != _direction)
             localScaleX = -localScaleX;
