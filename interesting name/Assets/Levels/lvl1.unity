@@ -22384,7 +22384,7 @@ BoxCollider2D:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
     oldSize: {x: 1.25, y: 1.6}
-    newSize: {x: 1.25, y: 1.6}
+    newSize: {x: 1.6, y: 1.6}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -22440,7 +22440,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 1.25, y: 1.6}
+  m_Size: {x: 1.6, y: 1.6}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -22492,6 +22492,7 @@ MonoBehaviour:
   dashingPower: 25
   dashingTime: 0.25
   dashingCooldown: 1
+  dashNumber: 1
   slipMultiplier: 0.04
   slipDecayRate: 0.1
   slipAcceleration: 0.2

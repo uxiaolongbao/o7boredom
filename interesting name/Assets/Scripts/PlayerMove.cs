@@ -36,6 +36,8 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float dashingPower;
     [SerializeField] private float dashingTime;
     [SerializeField] private float dashingCooldown;
+    [SerializeField] private int dashNumber;
+    private int dashCounter;
     private int jumpCounter;
     //Slippery make player uncontrollable
     private bool isSlipping = false;
@@ -184,8 +186,25 @@ public class PlayerMove : MonoBehaviour
         // dash logic
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            StartCoroutine(Dash());
-        }
+            if (!isGrounded())
+            {
+                dashCounter++;
+                if (dashCounter <= dashNumber)
+                {
+                    StartCoroutine(Dash());
+                } else
+                {
+                    dashCounter = 0;
+                }
+            }
+            else
+            {
+                StartCoroutine(Dash());
+                
+            }
+            dashCounter = 0;
+
+        } 
         animator.SetBool("isDash", isDashing);
     }
 
