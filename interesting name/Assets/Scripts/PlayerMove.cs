@@ -133,6 +133,7 @@ public class PlayerMove : MonoBehaviour
         {
             coyoteTimeCounter = coyoteTime;
             jumpCounter = extraJumps;
+            dashCounter = 0;
         }
         else
         {
@@ -184,6 +185,7 @@ public class PlayerMove : MonoBehaviour
             isJumping = false;
         animator.SetBool("isJump", !isGrounded());
         // dash logic
+
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (!isGrounded())
@@ -192,17 +194,12 @@ public class PlayerMove : MonoBehaviour
                 if (dashCounter <= dashNumber)
                 {
                     StartCoroutine(Dash());
-                } else
-                {
-                    dashCounter = 0;
                 }
             }
             else
             {
                 StartCoroutine(Dash());
-                
             }
-            dashCounter = 0;
 
         } 
         animator.SetBool("isDash", isDashing);
