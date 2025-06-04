@@ -193,12 +193,14 @@ public class PlayerMove : MonoBehaviour
                 dashCounter++;
                 if (dashCounter <= dashNumber)
                 {
+                    animator.SetTrigger("Dash");
                     StartCoroutine(Dash());
                 }
             }
             else
             {
                 StartCoroutine(Dash());
+                animator.SetTrigger("Dash");
             }
 
         } 
