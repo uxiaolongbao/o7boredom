@@ -19,7 +19,7 @@ public class PotionScript : MonoBehaviour
     {
         if(other.gameObject.CompareTag("Player"))
         {
-            Destroy(other.gameObject);
+            Destroy(gameObject);
             //Health.Heal(50); 
         }   
     }    
