@@ -18,8 +18,17 @@ public class PlayerAttack : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKey(KeyCode.X) && cooldownTimer > attackCooldown)
-            Attack();
+        if (Input.GetKey(KeyCode.X))
+        {
+            if (cooldownTimer > attackCooldown)
+            {
+                Attack();
+            }
+            else
+            {
+                anim.SetTrigger("animAttack");
+            }
+        }
 
         cooldownTimer += Time.deltaTime;
     }
