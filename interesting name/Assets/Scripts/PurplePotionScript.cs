@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class PotionScript : MonoBehaviour
+public class PurplePotionScript : MonoBehaviour
 {
-    //public RigidBody2D PurplePotionRigidBody;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
@@ -17,10 +16,11 @@ public class PotionScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if(other.gameObject.CompareTag("Player"))
-        {
-            Destroy(gameObject);
-            //Health.Heal(50); 
-        }   
-    }    
+    if(other.gameObject.CompareTag("Player"))
+    {
+        Destroy(gameObject);
+        //speed?
+    }   
+    }  
 }
+
