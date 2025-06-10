@@ -14,6 +14,14 @@ public class Health : MonoBehaviour
 
     public float CurrentHealth { get; private set; }
     public float MaxHealth => startingHealth;
+    private void Update()
+{
+    if (isPlayer && Input.GetKeyDown(KeyCode.Q))
+    {
+        TakeDamage(10);
+        Debug.Log("Damage dealt to player");
+    }
+}
 
     private void Awake()
     {
