@@ -36,7 +36,7 @@ public class Icedude : MonoBehaviour
             if (cooldownTimer >= attackCooldown)
             {
                 cooldownTimer = 0;
-                anim.SetTrigger("meleeAttack");
+                anim.SetTrigger("Ice_attack");
             }
         }
 
