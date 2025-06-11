@@ -12,6 +12,8 @@ public class Health : MonoBehaviour
     public UnityEvent OnDeath; // for death logic
     public UnityEvent OnHurt;  // for hurt effects
 
+    //private Animator anim;
+
     public float CurrentHealth { get; private set; }
     public float MaxHealth => startingHealth;
     private void Update()
@@ -26,6 +28,7 @@ public class Health : MonoBehaviour
     private void Awake()
     {
         CurrentHealth = startingHealth;
+        //anim = GetComponent<Animator>();
     }
 
     public void TakeDamage(float damage)
@@ -43,7 +46,11 @@ public class Health : MonoBehaviour
         else
         {
             OnDeath?.Invoke();
-            if (isPlayer) Debug.Log("Player died!");
+            if (isPlayer) {
+                Debug.Log("Player died!");
+                //anim.SetBool("death", CurrentHealth <= 0);
+            }
+                
         }
     }
 

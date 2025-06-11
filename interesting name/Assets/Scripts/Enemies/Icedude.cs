@@ -16,13 +16,13 @@ public class Icedude : MonoBehaviour
     private float cooldownTimer = Mathf.Infinity;
 
     //References
-    private Animator anim;
+    //private Animator animIce;
     private Health playerHealth;
     private EnemyPatrol enemyPatrol;
 
     private void Awake()
     {
-        anim = GetComponent<Animator>();
+        //animIce = GetComponent<Animator>();
         enemyPatrol = GetComponentInParent<EnemyPatrol>();
     }
 
@@ -36,7 +36,7 @@ public class Icedude : MonoBehaviour
             if (cooldownTimer >= attackCooldown)
             {
                 cooldownTimer = 0;
-                anim.SetTrigger("Ice_attack");
+                //animIce.SetTrigger("Ice_attack");
             }
         }
 
@@ -71,7 +71,7 @@ public class Icedude : MonoBehaviour
 
     private void DamagePlayer()
     {
-        if (PlayerInSight())
+        if (PlayerInSight() && playerHealth != null)
             playerHealth.TakeDamage(damage);
     }
 }
