@@ -52,16 +52,36 @@ public class Health : MonoBehaviour
             if (isPlayer) Debug.Log($"Took {damage} damage! Health: {CurrentHealth}");
             StartCoroutine(Invunerability());
         }
+        
+
         else
         {
             OnDeath?.Invoke();
+
             if (isPlayer)
             {
                 Debug.Log("Player died!");
-                //anim.SetBool("death", CurrentHealth <= 0);
-            }
 
+                var move = GetComponent<PlayerMove>();
+                if (move != null) move.enabled = false;
+
+                var attack = GetComponent<PlayerAttack>();
+                if (attack != null) attack.enabled = false;
+
+                Rigidbody2D rb = GetComponent<Rigidbody2D>();
+                if (rb != null)
+                {
+                    rb.velocity = Vector2.zero;
+                    rb.bodyType = RigidbodyType2D.Static;
+                }
+
+                SpriteRenderer sr = GetComponent<SpriteRenderer>();
+                if (sr != null) sr.enabled = false;
+
+
+            }
         }
+
     }
 
     public void Heal(float amount)
