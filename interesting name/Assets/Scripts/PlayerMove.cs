@@ -12,11 +12,11 @@ public class PlayerMove : MonoBehaviour
     private BoxCollider2D boxCollider;
     private float wallJumpCooldown;
     private float horizontalInput;
-    private bool isJumping; 
     [SerializeField] private float wallSlideSpeed = 7f;
     [SerializeField] private float wallJumpHorizontalForce = 15f;
     private bool isWallJumping;
     private int lastWallDirection; // 1=right, -1=left
+    private bool wasOnWallLastFrame;
     //collision
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
@@ -181,7 +181,6 @@ public class PlayerMove : MonoBehaviour
 
             if (Input.GetKeyDown(KeyCode.Z))
             {
-                isJumping = true;
                 Jump();
             }
 
@@ -190,7 +189,6 @@ public class PlayerMove : MonoBehaviour
             wallJumpCooldown += Time.deltaTime;
 
         if (isGrounded()) { }
-            isJumping = false;
         animator.SetBool("isJump", !isGrounded());
         // dash logic
 
@@ -240,6 +238,7 @@ public class PlayerMove : MonoBehaviour
             {
                 body.linearVelocity = new UnityEngine.Vector2(body.linearVelocityX, jumpPower);
                 jumpCounter--;
+                dashCounter = 0;
             }
         }
         coyoteTimeCounter = 0;
@@ -260,7 +259,16 @@ public class PlayerMove : MonoBehaviour
         bool leftWall = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.left, rayLength, groundLayer);
         bool rightWall = Physics2D.Raycast(boxCollider.bounds.center, UnityEngine.Vector2.right, rayLength, groundLayer);
 
-        if(leftWall) lastWallDirection = -1;
+        bool justTouchedWall = (leftWall || rightWall) && !wasOnWallLastFrame;
+        wasOnWallLastFrame = (leftWall || rightWall);
+
+        if (justTouchedWall)
+        {
+            jumpCounter = extraJumps;
+            dashCounter = 0;
+        }
+
+        if (leftWall) lastWallDirection = -1;
         if(rightWall) lastWallDirection = 1;
 
         return leftWall || rightWall;
@@ -308,5 +316,4 @@ public class PlayerMove : MonoBehaviour
         yield return new WaitForSeconds(duration);
         canMove = true;
     }
-
 }

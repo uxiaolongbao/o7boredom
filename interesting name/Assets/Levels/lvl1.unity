@@ -1098,7 +1098,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &187923042
 Transform:
   m_ObjectHideFlags: 0
@@ -14995,7 +14995,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &848882946
 Transform:
   m_ObjectHideFlags: 0
@@ -19858,6 +19858,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: daf329a29ffbf7f4882cea9682217c31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  knockbackForce: 10
 --- !u!212 &1312075197
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -26375,8 +26379,8 @@ Transform:
   m_GameObject: {fileID: 2125228535}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 4.0451875, y: 4.075608, z: 1}
+  m_LocalPosition: {x: 6.0131, y: 0, z: 0}
+  m_LocalScale: {x: 16.07153, y: 4.075608, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 617738091}
