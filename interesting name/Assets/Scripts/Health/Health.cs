@@ -61,13 +61,6 @@ public class Health : MonoBehaviour
                 if (!dead)
                 {
                     anim.SetTrigger("die");
-                    if (GetComponent<PlayerMove>() != null)
-                        GetComponent<PlayerMove>().enabled = false;
-                    if (GetComponent<PlayerAttack>() != null)
-                        GetComponent<PlayerAttack>().enabled = false;
-                    Debug.Log("Player died!");
-                    Debug.Log("Press R to restart");
-                    dead = true;
                 }
             }
             //enemy death logic
@@ -84,7 +77,7 @@ public class Health : MonoBehaviour
         CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, startingHealth);
         OnHealthChanged?.Invoke(CurrentHealth);
     }
-    
+
     private IEnumerator Invunerability()
     {
         Physics2D.IgnoreLayerCollision(7, 3, true);
@@ -96,5 +89,18 @@ public class Health : MonoBehaviour
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
         Physics2D.IgnoreLayerCollision(7, 3, false);
+    }
+
+    public void PlayerDie()
+    {
+        if (GetComponent<PlayerMove>() != null)
+            GetComponent<PlayerMove>().enabled = false;
+        if (GetComponent<PlayerAttack>() != null)
+            GetComponent<PlayerAttack>().enabled = false;
+        Debug.Log("Player died!");
+        Debug.Log("Press R to restart");
+        dead = true;
+        if (GetComponent<SpriteRenderer>() != null)
+            GetComponent<SpriteRenderer>().enabled = false;
     }
 }
