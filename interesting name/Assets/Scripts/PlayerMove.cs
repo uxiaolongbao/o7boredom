@@ -5,11 +5,6 @@ using UnityEngine.UIElements;
 
 public class PlayerMove : MonoBehaviour
 {
-    //ladder
-    private Rigidbody2D rb;
-    public float moveSpeed, dirX, dirY; 
-    public bool ClimbingAllowed 
-
     //movement
     [SerializeField] private float speed;
     [SerializeField] private float jumpPower;
@@ -60,29 +55,16 @@ public class PlayerMove : MonoBehaviour
 
     //disable movement
     private bool canMove = true;
-
-
-    private void Start()
-    {
-        rb = GetComponent<Rigidbody2D>();
-        moveSpeed = 5f; 
-    }
+    
 
     private void Awake()
     {
-        rb = GetComponent<Rigidbody2D>();
+        body = GetComponent<Rigidbody2D>();
+        boxCollider = GetComponent<BoxCollider2D>();
     }
-
 
     private void Update()
     {
-        //Ladder movement
-        dirX = Input.GetAxisRaw("Horizontal") * moveSpeed; 
-        if (ClimbingAllowed)
-        {
-            dirY = Input.GetAxisRaw("Vertical") * moveSpeed; 
-        }
-
         //Disable movement
         if (!canMove || isDashing || isWallJumping)
             return;
@@ -229,22 +211,6 @@ public class PlayerMove : MonoBehaviour
 
         } 
         animator.SetBool("isDash", isDashing);
-    }
-
-
-    [System.Obsolete]
-    private void FixedUpdate()
-    {
-        if (ClimbingAllowed)
-        {
-            rb.bodyType = RigidbodyType2D.Kinematic;
-            rb.velocity = new UnityEngine.Vector2(dirX, dirY);
-        }
-        else
-        {
-            rb.bodyType = RigidbodyType2D.Dynamic;
-            rb.linearVelocity = new UnityEngine.Vector2(dirX, rb.linearVelocity.y);
-        }
     }
 
     //its literally jumping and all its variations duh. its called the jump method for a reason
