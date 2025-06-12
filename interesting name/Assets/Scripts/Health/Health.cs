@@ -7,7 +7,7 @@ public class Health : MonoBehaviour
     [Header("Health")]
     [SerializeField] private float startingHealth = 100f;
     [SerializeField] private bool isPlayer = false;
-    private bool dead;
+    public bool Dead { get; private set; }
 
     [Header("Events")]
     public UnityEvent<float> OnHealthChanged; // for healthbar updates
@@ -63,7 +63,7 @@ public class Health : MonoBehaviour
             //player death logic
             if (isPlayer)
             {
-                if (!dead)
+                if (!Dead)
                 {
                     anim.SetTrigger("die");
                 }
@@ -104,7 +104,7 @@ public class Health : MonoBehaviour
             GetComponent<PlayerAttack>().enabled = false;
         Debug.Log("Player died!");
         Debug.Log("Press R to restart");
-        dead = true;
+        Dead = true;
         if (GetComponent<SpriteRenderer>() != null)
             GetComponent<SpriteRenderer>().enabled = false;
     }

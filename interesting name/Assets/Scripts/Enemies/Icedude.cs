@@ -71,7 +71,7 @@ public class Icedude : MonoBehaviour
 
     private void DamagePlayer()
     {
-        if (PlayerInSight() && playerHealth != null)
+        if (PlayerInSight() && playerHealth != null && !playerHealth.Dead)
             playerHealth.TakeDamage(damage);
     }
 }
