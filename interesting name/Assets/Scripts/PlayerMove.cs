@@ -53,6 +53,10 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float cornerPushForce = 2f;
     [SerializeField] private float wallStickThreshold = 0.1f;
 
+    //disable movement
+    private bool canMove = true;
+    
+
     private void Awake()
     {
         body = GetComponent<Rigidbody2D>();
@@ -61,6 +65,10 @@ public class PlayerMove : MonoBehaviour
 
     private void Update()
     {
+        //Disable movement
+        if (!canMove || isDashing || isWallJumping)
+            return;
+
         if (isDashing)
         {
             return;
@@ -288,4 +296,17 @@ public class PlayerMove : MonoBehaviour
         isDashing = false;
         yield return new WaitForSeconds(dashingCooldown);
     }
+
+    public void DisableMovement(float duration)
+    {
+        StartCoroutine(DisableMovementRoutine(duration));
+    }
+
+    private IEnumerator DisableMovementRoutine(float duration)
+    {
+        canMove = false;
+        yield return new WaitForSeconds(duration);
+        canMove = true;
+    }
+
 }
