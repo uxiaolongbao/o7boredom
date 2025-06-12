@@ -55,7 +55,13 @@ public class PlayerMove : MonoBehaviour
 
     //disable movement
     private bool canMove = true;
-    
+
+    //ladder movement
+    [SerializeField] private float ladderClimbSpeed = 3f;
+    private bool onLadderZone = false;
+    private bool isOnLadder = false;
+    private float ladderInput = 0f;
+    private float defaultGravity;
 
     private void Awake()
     {
@@ -63,6 +69,12 @@ public class PlayerMove : MonoBehaviour
         boxCollider = GetComponent<BoxCollider2D>();
     }
 
+    //this is for ladder
+    private void Start()
+    {
+        body = GetComponent<Rigidbody2D>();
+        defaultGravity = body.gravityScale; 
+    }
     private void Update()
     {
         //Disable movement
@@ -211,6 +223,49 @@ public class PlayerMove : MonoBehaviour
 
         } 
         animator.SetBool("isDash", isDashing);
+
+        //ladder movement
+        if (onLadderZone)
+        {
+            ladderInput = Input.GetAxisRaw("Vertical");
+            isOnLadder = Mathf.Abs(ladderInput) > 0.1f;
+        }
+        else
+        {
+            ladderInput = 0f;
+            isOnLadder = false;
+        }
+
+    }
+
+    private void FixedUpdate()
+    {
+        //ladder movement
+        if (isOnLadder)
+        {
+            body.gravityScale = 0f;
+            body.linearVelocity = new UnityEngine.Vector2(body.linearVelocity.x, ladderInput * ladderClimbSpeed);
+        }
+        else if (!onLadderZone)
+        {
+            body.gravityScale = defaultGravity;
+        }
+    }
+    //ladder
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+        {
+            onLadderZone = true;
+        }
+    }
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.CompareTag("Ladder"))
+        {
+            onLadderZone = false;
+            isOnLadder = false;
+        }
     }
 
     //its literally jumping and all its variations duh. its called the jump method for a reason
