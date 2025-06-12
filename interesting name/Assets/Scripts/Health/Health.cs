@@ -30,6 +30,11 @@ public class Health : MonoBehaviour
             TakeDamage(10);
             Debug.Log("Damage dealt to player");
         }
+        if (isPlayer && Input.GetKeyDown(KeyCode.H))
+        {
+            Heal(10);
+            Debug.Log("Healed player");
+        }
     }
 
     private void Awake()
