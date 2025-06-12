@@ -2824,7 +2824,6 @@ MonoBehaviour:
   enemy: {fileID: 1205493896}
   speed: 3
   idleDuration: 3
-  anim: {fileID: 0}
 --- !u!4 &400027087
 Transform:
   m_ObjectHideFlags: 0
@@ -3191,7 +3190,7 @@ Camera:
   m_TargetDisplay: 0
   m_TargetEye: 0
   m_HDR: 1
-  m_AllowMSAA: 0
+  m_AllowMSAA: 1
   m_AllowDynamicResolution: 0
   m_ForceIntoRT: 0
   m_OcclusionCulling: 0
@@ -19229,6 +19228,8 @@ MonoBehaviour:
   OnHurt:
     m_PersistentCalls:
       m_Calls: []
+  iFramesDuration: 0
+  numberOfFlashes: 0
 --- !u!61 &1205493894
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -24610,6 +24611,8 @@ MonoBehaviour:
   OnHurt:
     m_PersistentCalls:
       m_Calls: []
+  iFramesDuration: 1.5
+  numberOfFlashes: 3
 --- !u!114 &1780546676
 MonoBehaviour:
   m_ObjectHideFlags: 0
