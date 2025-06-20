@@ -7,22 +7,22 @@ public class Health : MonoBehaviour
     [Header("Health")]
     [SerializeField] private float startingHealth = 100f;
     [SerializeField] private bool isPlayer = false;
+    public bool Dead { get; private set; }
 
     [Header("Events")]
     public UnityEvent<float> OnHealthChanged; // for healthbar updates
     public UnityEvent OnDeath; // for death logic
     public UnityEvent OnHurt;  // for hurt effects
 
-    [Header("iFrames")]
+    [Header("i-Frames")]
     [SerializeField] private float iFramesDuration;
     [SerializeField] private int numberOfFlashes;
     private SpriteRenderer spriteRend;
-    private bool invulnerable;
-
-    //private Animator anim;
+    private Animator anim;
 
     public float CurrentHealth { get; private set; }
     public float MaxHealth => startingHealth;
+
     private void Update()
     {
         if (isPlayer && Input.GetKeyDown(KeyCode.Q))
@@ -30,12 +30,17 @@ public class Health : MonoBehaviour
             TakeDamage(10);
             Debug.Log("Damage dealt to player");
         }
+        if (isPlayer && Input.GetKeyDown(KeyCode.H))
+        {
+            Heal(10);
+            Debug.Log("Healed player");
+        }
     }
 
     private void Awake()
     {
         CurrentHealth = startingHealth;
-        //anim = GetComponent<Animator>();
+        anim = GetComponent<Animator>();
         spriteRend = GetComponent<SpriteRenderer>();
     }
 
@@ -55,12 +60,19 @@ public class Health : MonoBehaviour
         else
         {
             OnDeath?.Invoke();
+            //player death logic
             if (isPlayer)
             {
-                Debug.Log("Player died!");
-                //anim.SetBool("death", CurrentHealth <= 0);
+                if (!Dead)
+                {
+                    anim.SetTrigger("die");
+                }
             }
-
+            //enemy death logic
+            if (GetComponentInParent<EnemyPatrol>() != null)
+                GetComponentInParent<EnemyPatrol>().enabled = false;
+            if (GetComponent<Icedude>() != null)
+                GetComponent<Icedude>().enabled = false; //this is kinda scuffed cus ill be disabling them each individually will need to fix
         }
     }
 
@@ -70,10 +82,9 @@ public class Health : MonoBehaviour
         CurrentHealth = Mathf.Clamp(CurrentHealth + amount, 0, startingHealth);
         OnHealthChanged?.Invoke(CurrentHealth);
     }
-    
+
     private IEnumerator Invunerability()
     {
-        invulnerable = true;
         Physics2D.IgnoreLayerCollision(7, 3, true);
         for (int i = 0; i < numberOfFlashes; i++)
         {
@@ -83,6 +94,18 @@ public class Health : MonoBehaviour
             yield return new WaitForSeconds(iFramesDuration / (numberOfFlashes * 2));
         }
         Physics2D.IgnoreLayerCollision(7, 3, false);
-        invulnerable = false;
+    }
+
+    public void PlayerDie()
+    {
+        if (GetComponent<PlayerMove>() != null)
+            GetComponent<PlayerMove>().enabled = false;
+        if (GetComponent<PlayerAttack>() != null)
+            GetComponent<PlayerAttack>().enabled = false;
+        Debug.Log("Player died!");
+        Debug.Log("Press R to restart");
+        Dead = true;
+        if (GetComponent<SpriteRenderer>() != null)
+            GetComponent<SpriteRenderer>().enabled = false;
     }
 }

@@ -2,19 +2,12 @@ using UnityEngine;
 
 public class DeathWall : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void OnTriggerEnter2D(Collider2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
-       if (other.CompareTag("Player"))
+        Health health = other.GetComponent<Health>();
+        if (health != null)
         {
-            //Hopefully implement a death animation
-            Debug.Log("Player death!");
-
-            //Destroy plyer
-            Destroy(other.gameObject); 
-
-            //Hopefully restart level too
-            //Code code code
+            health.TakeDamage(health.CurrentHealth);
         }
     }
 }
